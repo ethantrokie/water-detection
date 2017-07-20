@@ -5,7 +5,6 @@ import helperFunc
 import features
 import random
 import os
-import predictFunctions
 
 def preprocessVideo(path,numFrames, dFactor, densityMode):
     #sets vars if not put in
@@ -16,6 +15,7 @@ def preprocessVideo(path,numFrames, dFactor, densityMode):
         dFactor = 1;
     if (densityMode is None):
         densityMode = 0
+
     gray = Imagetransformations.importandgrayscale(path,numFrames,dFactor)
     #helperFunc.playVid(gray,"grayVid.avi")
     if(densityMode == 1):
@@ -23,7 +23,7 @@ def preprocessVideo(path,numFrames, dFactor, densityMode):
         #cv2.imwrite('mode_density.png', modeFrame)
     else:
         modeFrame = Imagetransformations.getDirectModeFrame(gray)
-        #cv2.imwrite('mode_Direct.png', modeFrame)
+        cv2.imwrite('mode_Direct.png', modeFrame)
     cap.release()
     residual = Imagetransformations.createResidual(gray,modeFrame)
     return residual

@@ -13,7 +13,7 @@ class SVM(StatModel):
        self.model = cv2.ml.SVM_create()
        self.model.setGamma(gamma)
        self.model.setC(C)
-       self.model.setKernel(cv2.ml.SVM_LINEAR)
+       self.model.setKernel(cv2.ml.SVM_RBF)
        self.model.setType(cv2.ml.SVM_C_SVC)
     def train(self, samples, responses):
        self.model.train(samples, cv2.ml.ROW_SAMPLE, responses)
@@ -21,7 +21,7 @@ class SVM(StatModel):
         return self.model.predict(samples,1)
         #return self.model.predict(samples,1)[1].ravel()
 def main():
-    samples, y_labels = ct.LoopsThroughAllVids("/data/beehive/VideoWaterDatabase/videos/water/","/data/beehive/VideoWaterDatabase/masks/water/","/data/beehive/VideoWaterDatabase/videos/non_water/",370,2,0,4,200,4000,10,20)
+    samples, y_labels = ct.LoopsThroughAllVids("/data/beehive/VideoWaterDatabase/videos/water/","/data/beehive/VideoWaterDatabase/masks/water/","/data/beehive/VideoWaterDatabase/videos/non_water/",500,2,0,4,200,4500,10,20)
     # samples, y_labels = ct.JustOneFolder("/data/beehive/VideoWaterDatabase/videos/water/pond/",
     #                                      "/data/beehive/VideoWaterDatabase/masks/water/pond/", 170, 2, 0, 4, 50, 300,
     #                                      10, 20)
@@ -32,7 +32,7 @@ def main():
     print(y_labels.shape)
     model = SVM()
     model.train(samples, y_labels)    # compute the hog feature
-    model.save("./with_motion_2000_samples_linear.xml")
+    model.save("./with_motion_4500_samples_rbf.xml")
 if __name__ == '__main__':
    main()
 

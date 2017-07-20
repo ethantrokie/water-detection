@@ -7,7 +7,7 @@ def playVid(arr, outputName):
     arr = arr.astype(np.uint8)
     width = arr.shape[1]
     height = arr.shape[0]
-    fps = 10
+    fps = 20
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(outputName, fourcc, fps, (width, height), False)
     counter = 0
@@ -26,7 +26,7 @@ def saveVid(arr, outputName):
     arr = arr.astype(np.uint8)
     width = arr.shape[1]
     height = arr.shape[0]
-    fps = 10
+    fps = 20
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     out = cv2.VideoWriter(outputName, fourcc, fps, (width, height), False)
     counter = 0

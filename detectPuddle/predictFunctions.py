@@ -1,13 +1,13 @@
+import math
+
 import cv2
 import numpy as np
+
 import Imagetransformations
-import helperFunc
-import features
-import random
-import os
 import containerFunctions as ct
-from sklearn.externals import joblib
-import math
+import features
+import helperFunc
+
 
 def moduleC(vidpath,maskpath,outputFolder, numFrames, dFactor, densityMode,boxSize,NumbofFrameSearch,numbofSamples,patchSize,numFramesAvg):
     preprocess = ct.preprocessVideo(vidpath,numFrames,dFactor,densityMode)

@@ -50,7 +50,7 @@ def testFullVid(vidpath,maskpath,outputFolder, numFrames, dFactor, densityMode,b
     kernel = np.ones((5, 5), np.float32)
     minrand = max(int(boxSize / 2 + 1), int(patchSize / 2))
     # load the SVM model
-    model = cv2.ml.SVM_load("just_ponds.xml")
+    model = cv2.ml.SVM_load("with_motion_4500_samples_rbf.xml")
     isWaterFound = np.zeros((height,width),  dtype = np.int)
     probabilityMask = np.zeros((height,width),  dtype = np.float64)
     placeHodler = 0

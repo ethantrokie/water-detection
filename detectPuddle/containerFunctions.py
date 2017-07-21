@@ -1,10 +1,12 @@
+import os
+import random
+
 import cv2
 import numpy as np
+
 import Imagetransformations
-import helperFunc
 import features
-import random
-import os
+
 
 def preprocessVideo(path,numFrames, dFactor, densityMode):
     #sets vars if not put in
@@ -106,6 +108,9 @@ def LoopsThroughAllVids(pathToVidsFolder,pathToMasksPondFolder,pathToOtherTextur
     halfamountofVidsinFolder = 15
     for folders in os.listdir(pathToOtherTextures):
         counter = 0
+        if folders == "pedestrians":
+            numbofSamples = 25000
+            numFrames = 600
         for vids in os.listdir(pathToOtherTextures + folders):
             if counter > halfamountofVidsinFolder:
                 break

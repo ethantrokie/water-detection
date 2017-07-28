@@ -153,7 +153,7 @@ def createMask(maskpath,dscale):
     img = cv2.imread(maskpath)
     width = img.shape[1]
     height = img.shape[0]
-    img = cv2.resize(img, (int(width / dscale), int(height / dscale)), interpolation=cv2.INTER_CUBIC)
+    img = cv2.resize(img, (int(height / dscale), int(width / dscale)), interpolation=cv2.INTER_CUBIC)
     big = img >= 127
     return big
 

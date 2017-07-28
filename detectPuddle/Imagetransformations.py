@@ -18,7 +18,7 @@ def importandgrayscale(path,numFrames,dscale):
         #checks to makes sure frame is valid
         if ret == True:
             if frame is not None:
-                frame = cv2.resize(frame,(int(width/dscale),int(height/dscale)),interpolation=cv2.INTER_CUBIC)
+                frame = cv2.resize(frame,(int(height/dscale),int(width/dscale)),interpolation=cv2.INTER_CUBIC)
                 gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
                 completeVid[:, :, counter] = gray
             else:

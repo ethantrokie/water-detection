@@ -33,26 +33,20 @@ Lastly in this process, the residual video is created. This is created by subtra
 Feature extraction of the video is what is used as the inputs for the machine learning algorithm. The two main features that will be extracted are going to be a “temporal feature” and a “spatial feature”. The temporal feature is essentially looking at a single pixel throughout the whole video and using the pixel intensity values over time to create a “signal”. Then you take that signal and take the Fourier transformation of that, and transfer it to the frequency where the “signals” are very different between water and non-water. Below in figure 1, the top graph is the pixel values over 200 frames of the video, where the blue is a water pixel, and red is a non-water pixel values. On the top graph the two signals are fairly different are, but they are even more different in the frequency domain, and it would be easier for the classifier to distinguish between different types of motion as well in the frequency domain. 
 
 
+![alt text](https://github.com/ethantrokie/water-detection/blob/master/detectPuddle/Picture1.png "Time and Frequency Graph")     
 
-
-
-
-Time Domain
-
-
-
-
-
-Frequency Domain
-Figure 1
+Figure 1: Top graph is time domain, bottom graph is frequency domain
 
 In addition to obtaining the temporal feature, the code obtains a spatial feature. This spatial feature is a Local Binary Pattern of a local patch around each pixel. In the figures below you can see how a LPB can be calculated. First you look at the center pixel and if the values of the pixels surrounding them is larger it gets a zero and if its less than the center pixel is one (figure 2). Then since there are 8 pixels surrounding the center pixel, that can be mapped to an 8 bit number, seen in the figure 3, and that number is the value in the location of the center pixel (figure 4).
 
+![alt text](https://github.com/ethantrokie/water-detection/blob/master/detectPuddle/Picture2.png "LBP diagram")  
 Figure 2
 
-figure 3
+![alt text](https://github.com/ethantrokie/water-detection/blob/master/detectPuddle/Picture3.png "LBP diagram")  
+Figure 3
 
-fig 4
+![alt text](https://github.com/ethantrokie/water-detection/blob/master/detectPuddle/Picture4.png "LBP diagram")  
+Figure 4
 
 After LBP is taken of a small patch of the image, say 5x5x30, a histogram is created of the values in that square, over 30 frames and that should give a histogram that describes the local area around that pixel. These two features can then be put into the classifier and classified as water or not water. 
 

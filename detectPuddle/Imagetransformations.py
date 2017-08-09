@@ -1,30 +1,42 @@
+from math import sqrt, pi
+
 import cv2
 import numpy as np
 from scipy import stats
-from math import e, sqrt, pi
-import helperFunc
 
-def importandgrayscale(path,numFrames,dscale):
+
+def importandgrayscale(path,numFrames,dscale,vidNum):
     #sets up variables to open and save video
     cap = cv2.VideoCapture(path)
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    if path is not 0:
+        actualNumFrames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    else:
+        actualNumFrames = np.inf
     #set amount of frames want to look at
     counter = 0
+    counter1 = 0
+    start = numFrames * vidNum
+    end = numFrames * (vidNum+ 1)
+    if end > actualNumFrames:
+        return None
     completeVid = np.zeros((int(height/dscale), int(width/dscale), numFrames), dtype=np.uint8)
     #main body
-    while(cap.isOpened() & (counter < numFrames)):
+    while(cap.isOpened() & (counter < end)):
         ret, frame = cap.read()
         #checks to makes sure frame is valid
-        if ret == True:
-            if frame is not None:
-                frame = cv2.resize(frame,(int(width/dscale),int(height/dscale)),interpolation=cv2.INTER_CUBIC)
-                gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-                completeVid[:, :, counter] = gray
+        if((counter >= start)&(counter < end)):
+            if ret == True:
+                if frame is not None:
+                    frame = cv2.resize(frame,(int(width/dscale),int(height/dscale)),interpolation=cv2.INTER_CUBIC)
+                    gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+                    completeVid[:, :, counter1] = gray
+                    counter1 += 1
+                else:
+                    break
             else:
                 break
-        else:
-            continue
         counter += 1
 
     cap.release()

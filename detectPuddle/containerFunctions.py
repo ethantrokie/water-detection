@@ -8,17 +8,20 @@ import Imagetransformations
 import features
 
 
-def preprocessVideo(path,numFrames, dFactor, densityMode):
+def preprocessVideo(path,numFrames, dFactor, densityMode,vidNum):
     #sets vars if not put in
-    cap = cv2.VideoCapture(path)
-    if(numFrames is None or numFrames == -1):
-        numFrames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    if path is not 0:
+        cap = cv2.VideoCapture(path)
+        if(numFrames is None or numFrames == -1):
+            numFrames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     if ((dFactor is None) or (dFactor == -1)):
         dFactor = 1;
     if (densityMode is None):
         densityMode = 0
 
-    gray = Imagetransformations.importandgrayscale(path,numFrames,dFactor)
+    gray = Imagetransformations.importandgrayscale(path,numFrames,dFactor,vidNum)
+    if gray is None:
+        return None
     #helperFunc.playVid(gray,"grayVid.avi")
     if(densityMode == 1):
         modeFrame = Imagetransformations.getDensitytModeFrame(gray)
@@ -26,11 +29,12 @@ def preprocessVideo(path,numFrames, dFactor, densityMode):
     else:
         modeFrame = Imagetransformations.getDirectModeFrame(gray)
         cv2.imwrite('mode_Direct.png', modeFrame)
-    cap.release()
+    if path is not 0:
+        cap.release()
     residual = Imagetransformations.createResidual(gray,modeFrame)
     return residual
 
-def getFeatures(preprocessedVid,maskpath,dscale,boxSize,TemporalLength,numbofSamples,patchSize,numFramesAvg):
+def getFeaturesPoints(preprocessedVid,maskpath,dscale,boxSize,TemporalLength,numbofSamples,patchSize,numFramesAvg):
     #sets up vars
     width = preprocessedVid.shape[1]
     height = preprocessedVid.shape[0]
@@ -73,8 +77,8 @@ def getFeatures(preprocessedVid,maskpath,dscale,boxSize,TemporalLength,numbofSam
 
 
 def moduleB(vidpath,maskpath, numFrames, dFactor, densityMode,boxSize,NumbofFrameSearch,numbofSamples,patchSize,numFramesAvg):
-    preprocess = preprocessVideo(vidpath,numFrames,dFactor,densityMode)
-    features, isWater = getFeatures(preprocess,maskpath,dFactor,boxSize,NumbofFrameSearch,numbofSamples,patchSize,numFramesAvg)
+    preprocess = preprocessVideo(vidpath,numFrames,dFactor,densityMode,1)
+    features, isWater = getFeaturesPoints(preprocess,maskpath,dFactor,boxSize,NumbofFrameSearch,numbofSamples,patchSize,numFramesAvg)
     return features, isWater
 
 #for training the classifier
@@ -105,12 +109,9 @@ def LoopsThroughAllVids(pathToVidsFolder,pathToMasksPondFolder,pathToOtherTextur
             counter+= 1
             print(counter)
         print(folders)
-    halfamountofVidsinFolder = 15
+    halfamountofVidsinFolder = 20
     for folders in os.listdir(pathToOtherTextures):
         counter = 0
-        if folders == "pedestrians":
-            numbofSamples = 25000
-            numFrames = 600
         for vids in os.listdir(pathToOtherTextures + folders):
             if counter > halfamountofVidsinFolder:
                 break

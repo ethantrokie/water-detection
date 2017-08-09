@@ -1,5 +1,5 @@
 # Water Detection in City Streets Using a Single Camera
-## By: Ethan Trokie, Zeeshan Nadir, Nicola Ferrier, Pete Beckman
+### By: Ethan Trokie, Zeeshan Nadir, Nicola Ferrier, Pete Beckman
 
 ## Introduction
 

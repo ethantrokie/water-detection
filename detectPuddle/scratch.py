@@ -1,7 +1,4 @@
 import  predictFunctions
 
-#predictFunctions.moduleC("/data/beehive/VideoWaterDatabase/videos/water/pond/pond_020.avi","/data/beehive/VideoWaterDatabase/masks/water/pond/pond_020.png",100,4,0,4,30,100,20,6)
-#predictFunctions.predictFromOtherSVM("/data/Video.MOV","/data/beehive/ForTesting/masks/water/river/river_024.png",50,2,0,4,50,100,10,32)
-#Imagetransformations.importandHSB("/data/Video_1.MOV",300,1)
-predictFunctions.testFullVid("past stuff I'm keeping/canal_001.avi","/data/beehive/ForTesting/masks/water/canal/canal_024.png","/data/beehive/Results/",200,2,0,5,200,100,10,32)
-#trainSVM.main()
+
+predictFunctions.moduleE("/data/beehive/ForTesting/videos/water/pond/pond_024.avi","/data/beehive/ForTesting/masks/water/pond/pond_024.png","/data/beehive/Results/",200,2,0,5,10,100,5)

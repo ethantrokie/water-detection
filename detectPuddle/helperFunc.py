@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from math import e, sqrt, pi
 
 #plays videos of type VideoWriter
 def playVid(arr, outputName):

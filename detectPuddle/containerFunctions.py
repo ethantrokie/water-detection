@@ -1,12 +1,10 @@
 import os
 import random
-
 import cv2
 import numpy as np
-
 import Imagetransformations
 import features
-
+import plotFuncs
 
 def preprocessVideo(path,numFrames, dFactor, densityMode,vidNum):
     #sets vars if not put in
@@ -62,13 +60,13 @@ def getFeaturesPoints(preprocessedVid,maskpath,dscale,boxSize,TemporalLength,num
         randz = random.randrange(int(TemporalLength/2), numFrames - int(TemporalLength/2))
         isWater[0,i] = mask[randy,randx]
         temporalArr[i,:] = features.fourierTransform(preprocessedVid,randx,randy,randz,boxSize,TemporalLength)
-        temporalFeat = features.fourierTransform(preprocessedVid, randx, randy, randz, boxSize, TemporalLength)
+        temporalFeat = temporalArr[i,:]
 
         spatialArr[i,:] = features.SpatialFeatures(preprocessedVid,randx,randy,randz,patchSize,numFramesAvg)
-        spaceFeat = features.SpatialFeatures(preprocessedVid,randx,randy,randz,patchSize,numFramesAvg)
+        spaceFeat = spatialArr[i,:]
         combinedFeature = np.concatenate((np.reshape(temporalFeat,(temporalFeat.size)),spaceFeat))
         totalFeatures[i,:] = combinedFeature
-    #features.PlotTemporalFeatures(temporalArr, isWater,numbofSamples)
+    #plotFuncs.PlotTemporalFeatures(temporalArr, isWater,numbofSamples)
     #features.plotSpatialFeatures(spatialArr,isWater,numbofSamples)
 
     print("finished computing unified featureSpace")

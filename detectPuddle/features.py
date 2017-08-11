@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from skimage import feature as feat
 import math
-
+import plotFuncs
 
 #functions that find features
 
@@ -21,7 +21,6 @@ def fourierTransform(completeVid,randx,randy,randz,boxSize,temporalLength):
         counter += 1
 
     fourier = np.fft.fft(arrforFourier)
-
     amplitude_spectrum = np.abs(fourier)
     sumofSignal = np.sum(amplitude_spectrum)
     temporalFeature = amplitude_spectrum/sumofSignal
@@ -65,7 +64,7 @@ def fourierTransformFullImage(completeVid,boxSize):
     temporalFeature = np.zeros(amplitude_spectrum.shape)
     for i in range(fourier.shape[2]):
         temporalFeature[:, :, i] = amplitude_spectrum[:, :, i] / sumofSignal
-    # plotTimeandFourier(temporalFeature,convolveArr,30,200,20,26)
+    #plotFuncs.plotTimeandFourier(temporalFeature,convolveArr,30,150,30,30)
     temporalFeature[np.isnan(temporalFeature)] = 255
     temporalFeature[np.isinf(temporalFeature)] = 255
     return temporalFeature

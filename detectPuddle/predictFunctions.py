@@ -1,5 +1,3 @@
-import math
-
 import cv2
 import numpy as np
 import sys
@@ -145,7 +143,7 @@ def testFullVid(vidpath,maskpath,outputFolder, numFrames, dFactor, densityMode,b
     height = feature.shape[0]
     minrand = max(int(boxSize / 2 + 1), int(patchSize / 2))
     # load the SVM model
-    model = joblib.load('tree150log2.pkl')
+    model = joblib.load('tree_currentBest.pkl')
     isWaterFound = np.zeros((height,width),  dtype = np.int)
     newShape = feature.reshape((feature.shape[0] * feature.shape[1], feature.shape[2]))
     prob = model.predict_proba(newShape)[:, 0]
@@ -169,73 +167,17 @@ def testFullVid(vidpath,maskpath,outputFolder, numFrames, dFactor, densityMode,b
     width = isWaterFound.shape[1]
     height = isWaterFound.shape[0]
     isWaterFound = isWaterFound[11:height-11, 11:width-11]
-    trueMask = trueMask[11:height-11, 11:width-11]
     if trueMask is not None:
         cv2.imshow("mask created",isWaterFound)
-    cv2.imwrite(outputFolder + str(vidNum) +'newMask_direct.png', isWaterFound)
-    if trueMask is not None:
+        trueMask = trueMask[11:height - 11, 11:width - 11]
         cv2.imshow("old mask", trueMask)
         cv2.waitKey(0)
-    if trueMask is not None:
         FigureOutNumbers(isWaterFound, trueMask)
+    cv2.imwrite(outputFolder + str(vidNum) + 'newMask_direct.png', isWaterFound)
     completeVid = Imagetransformations.importandgrayscale(vidpath,numFrames,dFactor,vidNum)
     maskedImg = maskFrameWithMyMask(completeVid[11:height-11, 11:width-11,int(numFrames/2)],isWaterFound)
     cv2.imwrite(outputFolder + str(vidNum) + 'Masked_frame_from_video.png', maskedImg)
     return isWaterFound, trueMask
-
-
-
-# def testFullVid(vidpath,maskpath,outputFolder, numFrames, dFactor, densityMode,boxSize,numbofFrameSearch,numbofSamples,patchSize,numFramesAvg,vidNum):
-#     feature, trueMask = moduleC(vidpath,maskpath,outputFolder,numFrames,dFactor,densityMode,boxSize,numbofFrameSearch,numbofSamples,patchSize,numFramesAvg,vidNum)
-#     if feature is None:
-#         return None, None
-#     width = feature.shape[1]
-#     height = feature.shape[0]
-#     minrand = max(int(boxSize / 2 + 1), int(patchSize / 2))
-#     # load the SVM model
-#     model = cv2.ml.SVM_load("with_motion_4500_samples_rbf.xml")
-#     isWaterFound = np.zeros((height,width),  dtype = np.int)
-#     probabilityMask = np.zeros((height,width),  dtype = np.float64)
-#     for i in range(height):
-#         for j in range(width):
-#             h = feature[i,j,:]
-#             h = h.reshape(-1, h.shape[0])
-#             dist = model.predict(h,0,1)[1]
-#             prob = 1/(1+math.exp(-1*dist))
-#             probabilityMask[i, j] = 1 - prob
-#             if(prob < 0.5):
-#                 isWaterFound[i,j] = True
-#             else:
-#                 isWaterFound[i,j] = False
-#         #print(i)
-#
-#     isWaterFound = isWaterFound.astype(np.uint8)
-#     isWaterFound = isWaterFound[minrand:height-minrand, minrand:width-minrand]
-#     if trueMask is not None:
-#         trueMask = trueMask[minrand:height-minrand,minrand:width-minrand]
-#         trueMask[trueMask == 1] = 255
-#     isWaterFound[isWaterFound == 1] = 255
-#     beforeReg = outputFolder + str(vidNum) + '_before_regularization' + '.png'
-#     cv2.imwrite(beforeReg, isWaterFound)
-#     probabilityMask = probabilityMask[minrand:height-minrand, minrand:width-minrand]
-#     probabilityMask = (probabilityMask-np.min(probabilityMask))/(np.max(probabilityMask)-np.min(probabilityMask))
-#     for i in range(11):
-#         isWaterFound = regularizeFrame(isWaterFound,probabilityMask,.2)
-#     #isWaterFound = cv2.morphologyEx(isWaterFound, cv2.MORPH_OPEN, kernel)
-#     if trueMask is not None:
-#         cv2.imshow("mask created",isWaterFound)
-#     cv2.imwrite(outputFolder + str(vidNum) +'newMask_direct.png', isWaterFound)
-#     if trueMask is not None:
-#         cv2.imshow("old mask", trueMask)
-#         cv2.waitKey(0)
-#     if trueMask is not None:
-#         FigureOutNumbers(isWaterFound, trueMask)
-#     completeVid = Imagetransformations.importandgrayscale(vidpath,numFrames,dFactor,vidNum)
-#     maskedImg = maskFrameWithMyMask(completeVid[minrand:height-minrand, minrand:width-minrand,int(numFrames/2)],isWaterFound)
-#     cv2.imwrite(outputFolder + str(vidNum) + 'Masked_frame_from_video.png', maskedImg)
-#     return isWaterFound, trueMask
-
-
 
 
 

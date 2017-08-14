@@ -3,7 +3,7 @@
 
 ## Introduction
 
-The goal of this program is to be able to detect flooding in city streets (or elsewhere) and be able to discern between water and non-water regions. This work was primarily based on a paper called “Water Detection through Spatio-Temporal Invariant Descriptors” by Pascal Mettes, Robby T. Tan, Remco C. Veltkamp. The code is mainly broken up into three separate pieces. 
+The goal of this program is to be able to detect flooding in city streets (or elsewhere) and be able to discern between water and non-water regions. This work was primarily based on a [paper](https://arxiv.org/abs/1511.00472) called “Water Detection through Spatio-Temporal Invariant Descriptors” by Pascal Mettes, Robby T. Tan, Remco C. Veltkamp. The code is mainly broken up into three separate pieces. And currently the [training set](https://staff.fnwi.uva.nl/p.s.m.mettes/) comes from the same training set they referenced in the paper.
 
 1.	Preprocessing
 2.	Feature Extraction
@@ -67,7 +67,7 @@ This testFullVid() function is called from inside moduleE(). What moduleE() does
 
 
 Tl;dr
-To run the classifier, all you must do is run moduleE() with the correct parameters.
+To run the classifier, all you must do is run moduleE() with the correct parameters. Can do in scratch.py
 •	Vidpath – (string) path to the test video or 0 (int)
 •	Maskpath - (string) path to the test mask or 0 (int) if you don’t have a mask
 •	outputFolder – (string) path to folder where you want the resulting images to output or use “/”to have images output in the current directory (path must exist)
@@ -90,6 +90,21 @@ LoopsThroughAllVids() is in containerFunctions.py and takes a certain amount of 
 LoopsThroughAllVids() does this by looping through each folder with sample videos of different situations that you could see water in (streams, ponds, canals etc.). Inside each of these loops it calls moduleB(). Inside moduleB() it calls getFeaturesPoints(). This function choose random points (can choose amount of points per video) in space and time, and extracts the features, both temporal and spatial) of those points and returns a concatenated vector of all the feature vectors you obtained in that video and returns those vector as totalFeatures and whether those features were water or not water in the vector isWater.
 
 Then LoopsThroughAllVids() concatenates all of the totalFeatures from each video together. It also concatenates all the isWater vectors together. This creates one matrix of size (n_samples, feature_length) and a vector of shape (n_samples). Then these two matrices are returned and used to train the classifier in trainForest.py and saves the classifier for later use.
+
+To retrain the classifier you just have the change the inputs of loopThroughAllVids()
+
+•	pathToVidsFolder - (string) path to folder with folders of water videos
+•	pathToMaskFolder - (string) path to folder with folders of water masks
+•	pathToOtherTextures - (string) path to folder with folders of non water videos
+•	numFrames - (int) - number of frames for the video to get frames for (400-500 reccomended)
+•	dFactor - (int) - amount of times its going to downscale the video (2 reccomended)
+•	densityMode - (int) - whether to use density or direct mode (use 0)
+•	boxSize – (int) size of kernel to smooth image
+•	TemporalLength - (int) length of temporal features to be sampled (currently using 200)
+•	numbofSamples - (int) - amount of sample feature vectors youre going to get per video (make sure decision forest is trained with around 700,000 data points
+•	patchSize – (int) size of 2-D patch where the Local Binary Pattern will be calculated and histogram taken of
+•	numFramesAvg – (int) number of frames of size patchSize which the histogram will be taken of
+
 
 # Data Visualization
 
